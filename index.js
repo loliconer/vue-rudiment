@@ -26,7 +26,7 @@ export default class Vue {
     this.el = document.querySelector(el)
     this.bindings = {}
     this.scope = {}
-    this.prefix = 'rv'
+    this.prefix = 'v'
 
     this.compile(this.el)
     for (let key in data) {
@@ -38,10 +38,10 @@ export default class Vue {
     const self = this
 
     if (node.nodeType === 1) {
-      Array.prototype.slice.call(node.attributes).forEach(attr => {
+      Array.from(node.attributes).forEach(attr => {
         if (!attr.name.startsWith(`${this.prefix}-`)) return
 
-        const name = attr.name.replace(new RegExp(`^${this.prefix}-`), '')
+        const name = attr.name.slice(this.prefix.length + 1)
         const directive = new Directive(name, attr.value)
         self.bind(node, directive)
       })
